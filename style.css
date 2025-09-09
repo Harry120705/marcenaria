@@ -1,0 +1,131 @@
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(120deg, #f7f7f7 60%, #e0e0e0 100%);
+    min-height: 100vh;
+    padding: 0;
+}
+.banner {
+    background: url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2.2em;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px #333;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+.actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+.actions a {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.actions a:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    transform: scale(1.05);
+}
+.info {
+    margin-top: 20px;
+    color: #333;
+    font-size: 1.1em;
+}
+form {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    max-width: 400px;
+    margin: 30px auto 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+form label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+input, textarea, button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 1em;
+}
+input:focus, textarea:focus {
+    outline: 2px solid #007bff;
+    border-color: #007bff;
+}
+button {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+button:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    transform: scale(1.04);
+}
+@media (max-width: 700px) {
+    .container {
+        padding: 12px;
+    }
+    .banner {
+        font-size: 1.3em;
+        height: 120px;
+    }
+    .actions a {
+        padding: 10px 16px;
+        font-size: 1em;
+    }
+    form {
+        padding: 12px;
+        max-width: 98vw;
+    }
+}
+footer {
+    text-align:center;
+    margin-top:40px;
+    color:#888;
+    font-size: 0.95em;
+}
+/* Links gerais */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
