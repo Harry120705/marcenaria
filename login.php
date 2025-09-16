@@ -11,6 +11,9 @@ function generateJWT($userId, $email) {
     return "$header.$payload.$signature";
 }
 
+// Mensagem para toast
+$toast = '';
+$toastType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $senha = $_POST['senha'] ?? '';
@@ -27,17 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $jwt = generateJWT($id, $email);
                 $_SESSION['jwt'] = $jwt;
                 $_SESSION['user_id'] = $id;
-                header('Location: index.php');
+                header('Location: dashboard.php');
                 exit;
             } else {
-                echo '<p>Senha incorreta.</p>';
+                $toast = 'Senha incorreta.';
+                $toastType = 'error';
             }
         } else {
-            echo '<p>Email não encontrado.</p>';
+            $toast = 'Email não encontrado.';
+            $toastType = 'error';
         }
         $stmt->close();
     } else {
-        echo '<p>Preencha todos os campos.</p>';
+        $toast = 'Preencha todos os campos.';
+        $toastType = 'error';
     }
 }
 ?>
@@ -49,6 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <?php if ($toast): ?>
+        <div class="toast-message toast-<?= $toastType ?>">
+            <?= htmlspecialchars($toast) ?>
+        </div>
+        <script>
+            setTimeout(function(){
+                var toast = document.querySelector('.toast-message');
+                if (toast) toast.style.display = 'none';
+            }, 3500);
+        </script>
+    <?php endif; ?>
     <div class="banner" style="height:120px;font-size:1.3em;">Entrar na Marcenaria</div>
     <div class="container">
         <h2>Login</h2>

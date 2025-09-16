@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (isset($_SESSION['jwt'])) {
+    header('Location: dashboard.php');
+    exit;
+}
+// ...existing code...
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

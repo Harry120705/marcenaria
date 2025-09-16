@@ -6,7 +6,7 @@
 }
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(120deg, #f7f7f7 60%, #e0e0e0 100%);
+    background: linear-gradient(120deg, #e6e3d3 60%, #c7b198 100%);
     min-height: 100vh;
     padding: 0;
 }
@@ -19,9 +19,10 @@ body {
     color: #fff;
     font-size: 2.2em;
     font-weight: bold;
-    text-shadow: 2px 2px 8px #333;
+    text-shadow: 2px 2px 8px #3e2723;
     border-radius: 8px;
     margin-bottom: 30px;
+    background-blend-mode: multiply;
 }
 .container {
     max-width: 600px;
@@ -29,8 +30,9 @@ body {
     background: #fff;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 16px rgba(62,39,35,0.08);
     margin-bottom: 30px;
+    border: 2px solid #4e944f;
 }
 .actions {
     display: flex;
@@ -40,17 +42,17 @@ body {
     flex-wrap: wrap;
 }
 .actions a {
-    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    background: linear-gradient(90deg, #4e944f 60%, #6c4c1b 100%);
     color: #fff;
     padding: 14px 32px;
     border-radius: 6px;
     font-size: 1.1em;
     text-decoration: none;
     transition: background 0.2s, transform 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(62,39,35,0.08);
 }
 .actions a:hover {
-    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    background: linear-gradient(90deg, #6c4c1b 60%, #4e944f 100%);
     transform: scale(1.05);
 }
 .info {
@@ -62,12 +64,13 @@ form {
     background: #fff;
     padding: 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 16px rgba(62,39,35,0.08);
     max-width: 400px;
     margin: 30px auto 20px auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    border: 2px solid #4e944f;
 }
 form label {
     font-weight: 500;
@@ -78,16 +81,16 @@ input, textarea, button {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #bbb;
+    border: 1px solid #6c4c1b;
     border-radius: 4px;
     font-size: 1em;
 }
 input:focus, textarea:focus {
-    outline: 2px solid #007bff;
-    border-color: #007bff;
+    outline: 2px solid #4e944f;
+    border-color: #4e944f;
 }
 button {
-    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    background: linear-gradient(90deg, #4e944f 60%, #6c4c1b 100%);
     color: #fff;
     border: none;
     font-weight: bold;
@@ -95,7 +98,7 @@ button {
     transition: background 0.2s, transform 0.2s;
 }
 button:hover {
-    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    background: linear-gradient(90deg, #6c4c1b 60%, #4e944f 100%);
     transform: scale(1.04);
 }
 @media (max-width: 700px) {
@@ -118,14 +121,49 @@ button:hover {
 footer {
     text-align:center;
     margin-top:40px;
-    color:#888;
+    color:#6c4c1b;
     font-size: 0.95em;
 }
 /* Links gerais */
 a {
-    color: #007bff;
+    color: #4e944f;
     text-decoration: none;
 }
 a:hover {
     text-decoration: underline;
+}
+
+/* Toast/Modal de mensagem */
+.toast-message {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    min-width: 260px;
+    background: #fff;
+    color: #3e2723;
+    border: 2px solid #4e944f;
+    box-shadow: 0 2px 16px rgba(62,39,35,0.15);
+    padding: 18px 32px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    z-index: 9999;
+    opacity: 0.97;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeIn 0.7s;
+}
+.toast-success {
+    border-color: #4e944f;
+    background: #eafbe6;
+    color: #256029;
+}
+.toast-error {
+    border-color: #6c4c1b;
+    background: #fbeee6;
+    color: #6c4c1b;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 0.97; transform: translateY(0); }
 }

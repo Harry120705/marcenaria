@@ -7,6 +7,9 @@ function hashPassword($password) {
 }
 
 // Cadastro de usuário
+// Mensagem para toast
+$toast = '';
+$toastType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -17,13 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)');
         $stmt->bind_param('sss', $nome, $email, $senhaHash);
         if ($stmt->execute()) {
-            echo '<p>Usuário cadastrado com sucesso!</p>';
+            $toast = 'Usuário cadastrado com sucesso!';
+            $toastType = 'success';
         } else {
-            echo '<p>Erro ao cadastrar usuário: ' . $stmt->error . '</p>';
+            $toast = 'Erro ao cadastrar usuário: ' . $stmt->error;
+            $toastType = 'error';
         }
         $stmt->close();
     } else {
-        echo '<p>Preencha todos os campos.</p>';
+        $toast = 'Preencha todos os campos.';
+        $toastType = 'error';
     }
 }
 ?>
@@ -35,6 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <?php if ($toast): ?>
+        <div class="toast-message toast-<?= $toastType ?>">
+            <?= htmlspecialchars($toast) ?>
+        </div>
+        <script>
+            setTimeout(function(){
+                var toast = document.querySelector('.toast-message');
+                if (toast) toast.style.display = 'none';
+            }, 3500);
+        </script>
+    <?php endif; ?>
     <div class="banner" style="height:120px;font-size:1.3em;">Cadastre-se na Marcenaria</div>
     <div class="container">
         <h2>Cadastro de Usuário</h2>
