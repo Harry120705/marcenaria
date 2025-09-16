@@ -45,14 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Produto</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h2><?= $id ? 'Editar Produto' : 'Novo Produto' ?></h2>
+    <div class="banner">Produto</div>
     <form method="POST">
+        <h2><?= $id ? 'Editar Produto' : 'Novo Produto' ?></h2>
         <label>Nome:</label><br>
         <input type="text" name="nome" value="<?= htmlspecialchars($nome) ?>" required><br>
         <label>Descrição:</label><br>
@@ -62,7 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Quantidade:</label><br>
         <input type="number" name="quantidade" value="<?= htmlspecialchars($quantidade) ?>" required><br>
         <button type="submit">Salvar</button>
+        <div class="actions" style="margin-bottom: 10px;">
+            <a href="produtos.php">Voltar</a>
+        </div>
     </form>
-    <a href="produtos.php">Voltar</a>
+
+
 </body>
 </html>

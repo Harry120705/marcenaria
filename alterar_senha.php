@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="password" name="senha" required><br>
         <button type="submit">Alterar</button>
     </form>
-    <a href="usuario.php?id=<?= $id ?>">Voltar</a>
+    <div class="actions" style="margin-top: 28px;">
+        <a href="usuario.php?id=<?= $id ?>">Voltar</a>
+    </div>
 </body>
 </html>
