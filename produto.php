@@ -26,15 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $novaDescricao = $_POST['descricao'] ?? '';
     $novoPreco = $_POST['preco'] ?? '';
     $novaQuantidade = $_POST['quantidade'] ?? '';
+    $imagemPath = $_POST['imagem'] ?? '';
     if ($novoNome && $novoPreco !== '') {
         if ($id) {
-            $stmt = $conn->prepare('UPDATE produtos SET nome = ?, descricao = ?, preco = ?, quantidade = ? WHERE id = ?');
-            $stmt->bind_param('ssdii', $novoNome, $novaDescricao, $novoPreco, $novaQuantidade, $id);
+            $stmt = $conn->prepare('UPDATE produtos SET nome = ?, descricao = ?, preco = ?, quantidade = ?, imagem = ? WHERE id = ?');
+            $stmt->bind_param('ssdisi', $novoNome, $novaDescricao, $novoPreco, $novaQuantidade, $imagemPath, $id);
             $stmt->execute();
             $stmt->close();
         } else {
-            $stmt = $conn->prepare('INSERT INTO produtos (nome, descricao, preco, quantidade) VALUES (?, ?, ?, ?)');
-            $stmt->bind_param('ssdi', $novoNome, $novaDescricao, $novoPreco, $novaQuantidade);
+            $stmt = $conn->prepare('INSERT INTO produtos (nome, descricao, preco, quantidade, imagem) VALUES (?, ?, ?, ?, ?)');
+            $stmt->bind_param('ssdis', $novoNome, $novaDescricao, $novoPreco, $novaQuantidade, $imagemPath);
             $stmt->execute();
             $stmt->close();
         }
@@ -53,8 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <!-- menu hamburguer removido -->
     <div class="banner">Produto</div>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <h2><?= $id ? 'Editar Produto' : 'Novo Produto' ?></h2>
         <label>Nome:</label><br>
         <input type="text" name="nome" value="<?= htmlspecialchars($nome) ?>" required><br>
@@ -64,12 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="number" step="0.01" name="preco" value="<?= htmlspecialchars($preco) ?>" required><br>
         <label>Quantidade:</label><br>
         <input type="number" name="quantidade" value="<?= htmlspecialchars($quantidade) ?>" required><br>
+    <label>URL da Imagem:</label><br>
+    <input type="url" name="imagem" value="<?= isset($imagemPath) ? htmlspecialchars($imagemPath) : '' ?>" placeholder="https://..." style="width:100%"><br>
         <button type="submit">Salvar</button>
         <div class="actions" style="margin-bottom: 10px;">
             <a href="produtos.php">Voltar</a>
         </div>
     </form>
-
-
+    <!-- script do menu hamburguer removido -->
 </body>
 </html>
