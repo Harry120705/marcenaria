@@ -16,8 +16,41 @@ $result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
 </head>
 <body>
     <div class="banner">Produtos</div>
-    <div class="container">
-        <div class="actions" style="justify-content: flex-end; margin-bottom: 18px;">
+    <div class="menu-hamburguer">
+    <button class="menu-icon" id="menuBtn" aria-label="Abrir menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <nav id="side-menu" class="side-menu">
+            <div class="menu-header">
+                <div class="user-avatar">
+                    <span><?= strtoupper(substr($_SESSION['user_id'] ?? 'U',0,1)) ?></span>
+                </div>
+                <div class="saudacao">Olá, <strong><?php
+                    $id = $_SESSION['user_id'] ?? 0;
+                    $nome = '';
+                    if ($id) {
+                        $stmt = $conn->prepare('SELECT nome FROM usuarios WHERE id = ?');
+                        $stmt->bind_param('i', $id);
+                        $stmt->execute();
+                        $stmt->bind_result($nome);
+                        $stmt->fetch();
+                        $stmt->close();
+                    }
+                    echo htmlspecialchars($nome);
+                ?></strong></div>
+            </div>
+            <div class="menu-links">
+                <a href="dashboard.php">Início</a>
+                <a href="produtos.php">Produtos</a>
+                <a href="usuario.php">Meus Dados</a>
+            </div>
+            <a href="logout.php" class="logout-link">Sair</a>
+        </nav>
+    </div>
+    <div class="container container-produtos">
+        <div class="actions actions-produtos">
             <a href="produto.php">Novo Produto</a>
         </div>
         <div class="produtos-grid">
@@ -36,10 +69,25 @@ $result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
             </div>
             <?php endwhile; ?>
         </div>
-        <div class="actions" style="margin-top: 32px;">
+        <div class="actions actions-voltar">
             <a href="index.php">Voltar</a>
         </div>
     </div>
+    <script src="script.js"></script>
+    <script>
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('open');
+            document.getElementById('menuBtn').classList.toggle('active');
+        }
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('side-menu');
+            const icon = document.getElementById('menuBtn');
+            if (menu.classList.contains('open') && !menu.contains(e.target) && !icon.contains(e.target)) {
+                menu.classList.remove('open');
+                icon.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
 <?php

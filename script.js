@@ -1,2 +1,19 @@
 // script.js
-// Adicione JS personalizado aqui, se necessário.
+// Animação fluida para menu hamburguer
+document.addEventListener('DOMContentLoaded', function() {
+	const menuBtn = document.getElementById('menuBtn');
+	const sideMenu = document.getElementById('side-menu');
+	if (menuBtn && sideMenu) {
+		menuBtn.addEventListener('click', function(e) {
+			e.stopPropagation();
+			sideMenu.classList.toggle('open');
+			menuBtn.classList.toggle('active');
+		});
+		document.addEventListener('click', function(e) {
+			if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+				sideMenu.classList.remove('open');
+				menuBtn.classList.remove('active');
+			}
+		});
+	}
+});
