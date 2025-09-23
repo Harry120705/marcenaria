@@ -114,7 +114,7 @@ $totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
                 </div>
                 <div class="actions">
                     <a href="produto.php?id=<?= $row['id'] ?>">Ver/Editar</a>
-                    <a href="produtos.php?del=<?= $row['id'] ?>" onclick="return confirm('Excluir produto?')">Excluir</a>
+                    <a href="#" class="btn-excluir-produto" data-id="<?= $row['id'] ?>">Excluir</a>
                 </div>
             </div>
             <?php endwhile; ?>
@@ -133,6 +133,16 @@ $totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
         </div>
     </div>
     <script src="script.js"></script>
+    <div id="popup-excluir" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:12px; box-shadow:0 4px 24px #4e944f22; padding:32px 28px; min-width:320px; max-width:95vw; text-align:center;">
+            <h3 style="color:#a16207; margin-bottom:18px;">Confirmar exclusão</h3>
+            <p style="margin-bottom:24px;">Tem certeza que deseja excluir este produto?</p>
+            <div style="display:flex; gap:18px; justify-content:center;">
+                <button id="btnConfirmarExcluir" style="background:#a16207; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:1em; cursor:pointer;">Excluir</button>
+                <button id="btnCancelarExcluir" style="background:#4e944f; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:1em; cursor:pointer;">Cancelar</button>
+            </div>
+        </div>
+    </div>
     <script>
         function toggleMenu() {
             document.getElementById('side-menu').classList.toggle('open');
@@ -146,6 +156,28 @@ $totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
                 icon.classList.remove('active');
             }
         });
+
+        // Popup de exclusão customizado
+        let idParaExcluir = null;
+        document.querySelectorAll('.btn-excluir-produto').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                idParaExcluir = this.getAttribute('data-id');
+                document.getElementById('popup-excluir').style.display = 'flex';
+            });
+        });
+        document.getElementById('btnCancelarExcluir').onclick = function() {
+            document.getElementById('popup-excluir').style.display = 'none';
+            idParaExcluir = null;
+        };
+        document.getElementById('btnConfirmarExcluir').onclick = function() {
+            if (idParaExcluir) {
+                // Mantém filtros/página
+                const params = new URLSearchParams(window.location.search);
+                params.set('del', idParaExcluir);
+                window.location.href = 'produtos.php?' + params.toString();
+            }
+        };
     </script>
 </body>
 </html>
