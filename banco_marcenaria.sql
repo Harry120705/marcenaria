@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS categorias (
     nome VARCHAR(100) NOT NULL UNIQUE
 );
 
+
 CREATE TABLE IF NOT EXISTS produtos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -22,6 +23,7 @@ CREATE TABLE IF NOT EXISTS produtos (
     quantidade INT NOT NULL DEFAULT 0,
     imagem VARCHAR(255),
     categoria_id INT DEFAULT NULL,
+    destaque TINYINT(1) NOT NULL DEFAULT 0,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL
 );

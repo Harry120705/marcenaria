@@ -55,12 +55,33 @@ $produtos->close();
         <div class="produtos-destaque-wrapper">
             <div class="produtos-grid">
                 <?php
-                // Buscar produtos com categoria
-                $produtosCards = $conn->query('SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id LIMIT 12');
-                if ($produtosCards->num_rows === 0): ?>
+                // Buscar até 12 produtos em destaque
+                $sqlDestaque = "SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque = 1 LIMIT 12";
+                $produtosCards = $conn->query($sqlDestaque);
+                $produtosDestaque = [];
+                if ($produtosCards) {
+                    while ($row = $produtosCards->fetch_assoc()) {
+                        $produtosDestaque[] = $row;
+                    }
+                }
+                $countDestaque = count($produtosDestaque);
+                if ($countDestaque < 12) {
+                    // Buscar produtos com menor estoque para preencher até 12
+                    $idsDestaque = array_column($produtosDestaque, 'id');
+                    $idsStr = $idsDestaque ? implode(',', $idsDestaque) : '0';
+                    $faltam = 12 - $countDestaque;
+                    $sqlMenorEstoque = "SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.id NOT IN ($idsStr) ORDER BY p.quantidade ASC LIMIT $faltam";
+                    $produtosMenorEstoque = $conn->query($sqlMenorEstoque);
+                    if ($produtosMenorEstoque) {
+                        while ($row = $produtosMenorEstoque->fetch_assoc()) {
+                            $produtosDestaque[] = $row;
+                        }
+                    }
+                }
+                if (count($produtosDestaque) === 0): ?>
                     <div class="nenhum-produto">Nenhum produto cadastrado.</div>
                 <?php else:
-                    while ($p = $produtosCards->fetch_assoc()): ?>
+                    foreach ($produtosDestaque as $p): ?>
                         <div class="produto-card dashboard-card" data-id="<?= $p['id'] ?>">
                             <div class="produto-info">
                                 <h3><?= htmlspecialchars($p['nome']) ?></h3>
@@ -83,7 +104,7 @@ $produtos->close();
                                 <p class="desc-produto-dashboard" style="font-size:1.15em; color:#222; margin-top:18px;"> <?= nl2br(htmlspecialchars($p['descricao'])) ?> </p>
                             </div>
                         </div>
-                    <?php endwhile;
+                    <?php endforeach;
                 endif; ?>
             </div>
         </div>

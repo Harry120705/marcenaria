@@ -53,24 +53,29 @@ Sistema web simples para gerenciamento de marcenaria, desenvolvido em PHP. Permi
    - Importe o arquivo de estrutura do banco (ex: `banco_marcenaria.sql`).
    - Importe o arquivo de povoamento (ex: `povoar_marcenaria.sql`).
    - **Ordem recomendada:**
-      1. Primeiro, importe o arquivo de estrutura (tabelas).
-      2. Depois, importe o arquivo de povoamento (dados).
+     1. Primeiro, importe o arquivo de estrutura (tabelas).
+     2. Depois, importe o arquivo de povoamento (dados).
+
+   - **Sobre o campo de destaque:**
+     - Agora a tabela de produtos possui o campo `destaque` (TINYINT, padrão 0).
+     - Você pode marcar até 12 produtos como destaque pela tela de produtos do sistema.
+     - O dashboard exibe até 12 produtos em destaque, ou os 12 de menor estoque caso não haja suficientes destacados.
 
    - **Se precisar limpar o banco para reinserir os dados:**
-      1. Desabilite as restrições de foreign key:
-          ```sql
-          SET FOREIGN_KEY_CHECKS = 0;
-          ```
-      2. Trunque as tabelas na ordem correta:
-          ```sql
-          TRUNCATE TABLE produtos;
-          TRUNCATE TABLE categorias;
-          TRUNCATE TABLE usuarios;
-          ```
-      3. Reabilite as restrições:
-          ```sql
-          SET FOREIGN_KEY_CHECKS = 1;
-          ```
+     1. Desabilite as restrições de foreign key:
+        ```sql
+        SET FOREIGN_KEY_CHECKS = 0;
+        ```
+     2. Trunque as tabelas na ordem correta:
+        ```sql
+        TRUNCATE TABLE produtos;
+        TRUNCATE TABLE categorias;
+        TRUNCATE TABLE usuarios;
+        ```
+     3. Reabilite as restrições:
+        ```sql
+        SET FOREIGN_KEY_CHECKS = 1;
+        ```
 
 ### 5. Configure a conexão com o banco
    - Edite o arquivo `db.php` e ajuste usuário, senha e nome do banco conforme seu ambiente local.
