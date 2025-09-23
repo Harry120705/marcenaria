@@ -28,11 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Dados do Usuário</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="banner">Usuário</div>
     <form method="POST">
@@ -42,10 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Email:</label><br>
         <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" required><br>
         <button type="submit">Salvar</button>
+        <div class="actions" style="margin-top: 1px;">
+            <a href="alterar_senha.php?id=<?= $id ?>">Alterar Senha</a>
+            <a href="index.php">Voltar</a>
+        </div>
     </form>
-    <div class="actions" style="margin-top: 28px;">
-        <a href="alterar_senha.php?id=<?= $id ?>">Alterar Senha</a>
-        <a href="index.php">Voltar</a>
-    </div>
+
 </body>
+
 </html>

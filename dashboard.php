@@ -54,20 +54,32 @@ $produtos->close();
         <h3 class="titulo-dashboard">Produtos em Destaque</h3>
         <div class="produtos-grid">
             <?php
-            $produtosCards = $conn->query('SELECT nome, preco, descricao, imagem FROM produtos LIMIT 12');
+            // Buscar produtos com categoria
+            $produtosCards = $conn->query('SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id LIMIT 12');
             if ($produtosCards->num_rows === 0): ?>
                 <div class="nenhum-produto">Nenhum produto cadastrado.</div>
             <?php else:
                 while ($p = $produtosCards->fetch_assoc()): ?>
-                    <div class="produto-card">
-                        <div class="produto-img">
-                            <img src="<?= $p['imagem'] ? htmlspecialchars($p['imagem']) : 'https://via.placeholder.com/220x140?text=Produto' ?>"
-                                alt="<?= htmlspecialchars($p['nome']) ?>">
-                        </div>
+                    <div class="produto-card dashboard-card" data-id="<?= $p['id'] ?>">
                         <div class="produto-info">
                             <h3><?= htmlspecialchars($p['nome']) ?></h3>
+                            <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
                             <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
-                            <p class="desc-produto-dashboard"><?= htmlspecialchars(mb_strimwidth($p['descricao'], 0, 70, '...')) ?></p>
+                            <button class="btn-detalhes" data-id="<?= $p['id'] ?>">Ver detalhes</button>
+                        </div>
+                    </div>
+                    <div class="detalhe-modal" id="detalhe-<?= $p['id'] ?>">
+                        <div class="detalhe-card">
+                            <button class="fechar-modal">&times;</button>
+                            <h2><?= htmlspecialchars($p['nome']) ?></h2>
+                            <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
+                            <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
+                            <?php if (!empty($p['imagem'])): ?>
+                                <div style="text-align:center; margin:18px 0;">
+                                    <img src="<?= htmlspecialchars($p['imagem']) ?>" alt="Imagem do produto" style="max-width:220px; max-height:180px; border-radius:10px; box-shadow:0 2px 12px #4e944f22;">
+                                </div>
+                            <?php endif; ?>
+                            <p class="desc-produto-dashboard" style="font-size:1.15em; color:#222; margin-top:18px;"> <?= nl2br(htmlspecialchars($p['descricao'])) ?> </p>
                         </div>
                     </div>
                 <?php endwhile;
@@ -88,6 +100,29 @@ $produtos->close();
                 menu.classList.remove('open');
                 icon.classList.remove('active');
             }
+        });
+
+        // Modal detalhes produto
+        document.querySelectorAll('.btn-detalhes').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const id = this.getAttribute('data-id');
+                const modal = document.getElementById('detalhe-' + id);
+                if (modal) {
+                    modal.classList.add('show');
+                }
+            });
+        });
+        document.querySelectorAll('.fechar-modal').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.detalhe-modal').classList.remove('show');
+            });
+        });
+        // Fechar ao clicar fora
+        document.querySelectorAll('.detalhe-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('show');
+            });
         });
     </script>
 </body>

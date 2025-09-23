@@ -16,7 +16,7 @@ if (isset($_SESSION['jwt'])) {
 <body>
     <div class="banner">
         Marcenaria Artesanal<br>
-        <span class="subtitle">Gestão, Qualidade e Criatividade em Madeira</span>
+        <span class="subtitle"> Gestão, Qualidade e Criatividade em Madeira</span>
     </div>
     <div class="container">
         <h2>Bem-vindo ao Sistema de Gestão de Marcenaria</h2>
