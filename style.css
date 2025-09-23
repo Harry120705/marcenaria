@@ -278,7 +278,7 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(120deg, #fffff 60%, #14532d 100%);
     min-height: 100vh;
-    padding: 0;
+    padding: 0 ;
 }
 .banner {
     background: linear-gradient(120deg, #181818 60%, #14532d 100%);
