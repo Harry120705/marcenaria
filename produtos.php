@@ -5,7 +5,49 @@ if (!isset($_SESSION['jwt'])) {
     header('Location: login.php');
     exit;
 }
-$result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
+$itensPorPagina = 12;
+$pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
+$busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
+$filtroCategoria = isset($_GET['categoria']) ? intval($_GET['categoria']) : '';
+
+// Carregar categorias para filtro
+$categorias = [];
+$catResult = $conn->query('SELECT id, nome FROM categorias ORDER BY nome');
+while ($cat = $catResult->fetch_assoc()) {
+    $categorias[] = $cat;
+}
+
+$where = [];
+$params = [];
+$types = '';
+if ($busca !== '') {
+    $where[] = 'nome LIKE ?';
+    $params[] = "%$busca%";
+    $types .= 's';
+}
+if ($filtroCategoria) {
+    $where[] = 'categoria_id = ?';
+    $params[] = $filtroCategoria;
+    $types .= 'i';
+}
+$whereSQL = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+
+// Contar total
+$stmtCount = $conn->prepare("SELECT COUNT(*) FROM produtos $whereSQL");
+if ($where) $stmtCount->bind_param($types, ...$params);
+$stmtCount->execute();
+$stmtCount->bind_result($totalProdutos);
+$stmtCount->fetch();
+$stmtCount->close();
+
+$offset = ($pagina - 1) * $itensPorPagina;
+$sql = "SELECT id, nome, preco, quantidade FROM produtos $whereSQL ORDER BY id DESC LIMIT $itensPorPagina OFFSET $offset";
+$stmt = $conn->prepare($sql);
+if ($where) $stmt->bind_param($types, ...$params);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -50,9 +92,17 @@ $result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
         </nav>
     </div>
     <div class="container container-produtos">
-        <div class="actions actions-produtos">
-            <a href="produto.php">Novo Produto</a>
-        </div>
+        <form method="get" style="display:flex; gap:12px; align-items:center; margin-bottom:18px; flex-wrap:wrap;">
+            <input type="text" name="busca" placeholder="Buscar por nome" value="<?= htmlspecialchars($busca) ?>" style="padding:8px; border-radius:4px; border:1px solid #4e944f;">
+            <select name="categoria" style="padding:8px; border-radius:4px; border:1px solid #4e944f;">
+                <option value="">Todas as categorias</option>
+                <?php foreach ($categorias as $cat): ?>
+                    <option value="<?= $cat['id'] ?>" <?= ($filtroCategoria == $cat['id']) ? 'selected' : '' ?>><?= htmlspecialchars($cat['nome']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" style="background:#4e944f; color:#fff; border:none; border-radius:6px; padding:8px 18px; cursor:pointer;">Filtrar</button>
+            <a href="produto.php" style="margin-left:auto; background:#4e944f; color:#fff; border:none; border-radius:6px; padding:8px 18px; text-decoration:none;">Novo Produto</a>
+        </form>
         <div class="produtos-grid">
             <?php while ($row = $result->fetch_assoc()): ?>
             <div class="produto-card">
@@ -68,6 +118,15 @@ $result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
                 </div>
             </div>
             <?php endwhile; ?>
+        </div>
+        <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin:24px 0 0 0; flex-wrap:wrap;">
+            <?php if ($pagina > 1): ?>
+                <a href="?<?= http_build_query(array_merge($_GET, ['pagina' => $pagina-1])) ?>" class="btn-detalhes">&laquo; Anterior</a>
+            <?php endif; ?>
+            <span style="font-size:1.1em; color:#4e944f; font-weight:500;">Página <?= $pagina ?> de <?= $totalPaginas ?></span>
+            <?php if ($pagina < $totalPaginas): ?>
+                <a href="?<?= http_build_query(array_merge($_GET, ['pagina' => $pagina+1])) ?>" class="btn-detalhes">Próxima &raquo;</a>
+            <?php endif; ?>
         </div>
         <div class="actions actions-voltar">
             <a href="index.php">Voltar</a>
@@ -95,7 +154,12 @@ $result = $conn->query('SELECT id, nome, preco, quantidade FROM produtos');
 if (isset($_GET['del'])) {
     $id = intval($_GET['del']);
     $conn->query("DELETE FROM produtos WHERE id = $id");
-    header('Location: produtos.php');
+    // Mantém filtros/página ao excluir
+    $params = $_GET;
+    unset($params['del']);
+    $url = 'produtos.php';
+    if ($params) $url .= '?' . http_build_query($params);
+    header('Location: ' . $url);
     exit;
 }
 ?>
