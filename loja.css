@@ -5,7 +5,7 @@
     margin-bottom: 38px;
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 2px 12px #4e944f22;
+    box-shadow: 0 2px 12px #51ca5322;
     padding: 18px 12px 24px 12px;
 }
 .categoria-titulo {
@@ -111,8 +111,8 @@
     text-align: center;
 }
 .btn-vermais {
-    background: #232323;
-    color: #a3e635;
+    background: #43743b;
+    color: #ffffff;
     border: 2px solid #a3e635;
     border-radius: 6px;
     padding: 8px 18px;

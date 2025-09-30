@@ -51,36 +51,35 @@ $produtos->close();
             <a href="logout.php" class="logout-link">Sair</a>
         </nav>
     </div>
-    <main class="main-loja">
-    <h3 class="titulo-destaque-loja">Produtos em Destaque</h3>
+    <div class="destaque-centralizado">
         <div class="produtos-destaque-wrapper">
+            <h2 class="titulo-destaque-loja">Produtos em Destaque</h2>
             <div class="produtos-grid">
                 <?php
-                // Buscar até 12 produtos em destaque
-                $sqlDestaque = "SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque = 1 LIMIT 12";
-                $produtosCards = $conn->query($sqlDestaque);
                 $produtosDestaque = [];
-                if ($produtosCards) {
-                    while ($row = $produtosCards->fetch_assoc()) {
+                $sqlDestaque = "SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque = 1 LIMIT 12";
+                $resDestaque = $conn->query($sqlDestaque);
+                if ($resDestaque) {
+                    while ($row = $resDestaque->fetch_assoc()) {
                         $produtosDestaque[] = $row;
                     }
                 }
                 $countDestaque = count($produtosDestaque);
                 if ($countDestaque < 12) {
-                    // Buscar produtos com menor estoque para preencher até 12
                     $idsDestaque = array_column($produtosDestaque, 'id');
                     $idsStr = $idsDestaque ? implode(',', $idsDestaque) : '0';
                     $faltam = 12 - $countDestaque;
                     $sqlMenorEstoque = "SELECT p.id, p.nome, p.preco, p.descricao, p.imagem, c.nome as categoria FROM produtos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.id NOT IN ($idsStr) ORDER BY p.quantidade ASC LIMIT $faltam";
-                    $produtosMenorEstoque = $conn->query($sqlMenorEstoque);
-                    if ($produtosMenorEstoque) {
-                        while ($row = $produtosMenorEstoque->fetch_assoc()) {
+                    $resMenorEstoque = $conn->query($sqlMenorEstoque);
+                    if ($resMenorEstoque) {
+                        while ($row = $resMenorEstoque->fetch_assoc()) {
                             $produtosDestaque[] = $row;
                         }
                     }
                 }
-                if (count($produtosDestaque) === 0): ?>
-                    <div class="nenhum-produto">Nenhum produto cadastrado.</div>
+                ?>
+                <?php if (count($produtosDestaque) === 0): ?>
+                    <div class="nenhum-produto">Nenhum produto em destaque.</div>
                 <?php else:
                     foreach ($produtosDestaque as $p): ?>
                         <div class="produto-card dashboard-card" data-id="<?= $p['id'] ?>">
@@ -88,70 +87,70 @@ $produtos->close();
                                 <h3 class="titulo-destaque-loja"><?= htmlspecialchars($p['nome']) ?></h3>
                                 <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
                                 <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
-                                <button class="btn-detalhes" data-id="<?= $p['id'] ?>">Ver detalhes</button>
-                            </div>
-                        </div>
-                        <div class="detalhe-modal" id="detalhe-<?= $p['id'] ?>">
-                            <div class="detalhe-card">
-                                <button class="fechar-modal">&times;</button>
-                                <h2 class="titulo-destaque-loja"><?= htmlspecialchars($p['nome']) ?></h2>
-                                <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
-                                <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
-                                <?php if (!empty($p['imagem'])): ?>
-                                    <div style="text-align:center; margin:18px 0;">
-                                        <img src="<?= htmlspecialchars($p['imagem']) ?>" alt="Imagem do produto" style="max-width:220px; max-height:180px; border-radius:10px; box-shadow:0 2px 12px #4e944f22;">
-                                    </div>
-                                <?php endif; ?>
-                                <p class="desc-produto-dashboard" style="font-size:1.15em; color:#222; margin-top:18px;"> <?= nl2br(htmlspecialchars($p['descricao'])) ?> </p>
+                                <form method="get" action="produto.php" style="margin-bottom:6px;">
+                                    <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                                    <button type="submit" class="btn-vermais">Ver mais</button>
+                                </form>
+                                    <!-- Botão de compra removido para admin -->
                             </div>
                         </div>
                     <?php endforeach;
                 endif; ?>
             </div>
         </div>
-        <div class="atualizacoes-dashboard" style="margin-top:32px;">
-            <!-- Espaço reservado para futuras atualizações, avisos ou novidades -->
-        </div>
-    </main>
+    </div>
+    <div class="atualizacoes-dashboard" style="margin-top:32px;">
+        <!-- Espaço reservado para futuras atualizações, avisos ou novidades -->
+    </div>
     <footer>&copy; <?php echo date('Y'); ?> Marcenaria Artesanal</footer>
     <script src="script.js"></script>
-    <script>
-        function toggleMenu() {
-            document.getElementById('side-menu').classList.toggle('open');
-            document.getElementById('menuBtn').classList.toggle('active');
-        }
-        document.addEventListener('click', function (e) {
-            const menu = document.getElementById('side-menu');
-            const icon = document.getElementById('menuBtn');
-            if (menu.classList.contains('open') && !menu.contains(e.target) && !icon.contains(e.target)) {
-                menu.classList.remove('open');
-                icon.classList.remove('active');
+        <script>
+            function toggleMenu() {
+                document.getElementById('side-menu').classList.toggle('open');
+                document.getElementById('menuBtn').classList.toggle('active');
             }
-        });
-
-        // Modal detalhes produto
-        document.querySelectorAll('.btn-detalhes').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const id = this.getAttribute('data-id');
-                const modal = document.getElementById('detalhe-' + id);
-                if (modal) {
-                    modal.classList.add('show');
+            document.addEventListener('click', function (e) {
+                const menu = document.getElementById('side-menu');
+                const icon = document.getElementById('menuBtn');
+                if (menu.classList.contains('open') && !menu.contains(e.target) && !icon.contains(e.target)) {
+                    menu.classList.remove('open');
+                    icon.classList.remove('active');
                 }
             });
-        });
-        document.querySelectorAll('.fechar-modal').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.closest('.detalhe-modal').classList.remove('show');
+
+            // Card de produto dinâmico (Ver mais)
+            function abrirCardProduto(id) {
+                // Remove card anterior se existir
+                let cardExistente = document.getElementById('card-produto-detalhe');
+                if (cardExistente) cardExistente.remove();
+                // Cria overlay
+                let overlay = document.createElement('div');
+                overlay.id = 'card-produto-detalhe';
+                overlay.className = 'card-produto-detalhe-overlay';
+                overlay.innerHTML = '<div class="card-produto-detalhe"><div class="carregando">Carregando...</div></div>';
+                document.body.appendChild(overlay);
+                // AJAX para buscar dados
+                fetch('produto_detalhe.php?id=' + id)
+                    .then(r => r.text())
+                    .then(html => {
+                        overlay.innerHTML = html;
+                    });
+                // Fecha ao clicar fora
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.remove();
+                });
+            }
+            // Adiciona evento aos botões Ver mais
+            window.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.btn-vermais').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        let id = btn.parentElement.querySelector('input[name="id"]').value;
+                        abrirCardProduto(id);
+                    });
+                });
             });
-        });
-        // Fechar ao clicar fora
-        document.querySelectorAll('.detalhe-modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) this.classList.remove('show');
-            });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
