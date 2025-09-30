@@ -14,6 +14,11 @@ $stmt->execute();
 $stmt->bind_result($nome, $email, $tipoConta);
 $stmt->fetch();
 $stmt->close();
+// Permitir acesso apenas para admin
+if ($tipoConta !== 'admin') {
+    header('Location: loja.php');
+    exit;
+}
 // Dados dos produtos
 $produtos = $conn->query('SELECT COUNT(*) as total, SUM(quantidade) as estoque FROM produtos');
 $dados = $produtos->fetch_assoc();

@@ -5,6 +5,17 @@ if (!isset($_SESSION['jwt'])) {
     header('Location: login.php');
     exit;
 }
+$userId = $_SESSION['user_id'];
+$stmtTipo = $conn->prepare('SELECT tipo FROM usuarios WHERE id = ?');
+$stmtTipo->bind_param('i', $userId);
+$stmtTipo->execute();
+$stmtTipo->bind_result($tipoConta);
+$stmtTipo->fetch();
+$stmtTipo->close();
+if ($tipoConta !== 'admin') {
+    header('Location: loja.php');
+    exit;
+}
 $result = $conn->query('SELECT id, nome, email, criado_em FROM usuarios');
 ?>
 <!DOCTYPE html>

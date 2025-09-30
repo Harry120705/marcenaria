@@ -5,6 +5,17 @@ if (!isset($_SESSION['jwt'])) {
     header('Location: login.php');
     exit;
 }
+$userId = $_SESSION['user_id'];
+$stmt = $conn->prepare('SELECT tipo FROM usuarios WHERE id = ?');
+$stmt->bind_param('i', $userId);
+$stmt->execute();
+$stmt->bind_result($tipoConta);
+$stmt->fetch();
+$stmt->close();
+if ($tipoConta !== 'admin') {
+    header('Location: loja.php');
+    exit;
+}
 $itensPorPagina = 12;
 $pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
 $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';

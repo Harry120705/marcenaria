@@ -28,16 +28,61 @@ if (!empty($categorias)) {
     }
 }
 
-?><!DOCTYPE html>
+?>
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loja - Marcenaria</title>
     <link rel="stylesheet" href="loja.css">
+    <script src="loja.js" defer></script>
 </head>
 <body>
-    <div class="banner">Bem-vindo à Loja da Marcenaria</div>
+    <div class="banner">
+        <span class="banner-title">Bem-vindo à Loja da Marcenaria</span>
+        <?php
+        $usuarioLogado = false;
+        $nomeUsuario = '';
+        if (isset($_SESSION['jwt']) && isset($_SESSION['user_id'])) {
+            $usuarioLogado = true;
+            $stmt = $conn->prepare('SELECT nome FROM usuarios WHERE id = ?');
+            $stmt->bind_param('i', $_SESSION['user_id']);
+            $stmt->execute();
+            $stmt->bind_result($nomeUsuario);
+            $stmt->fetch();
+            $stmt->close();
+        }
+        ?>
+        <div class="banner-actions">
+            <?php if ($usuarioLogado): ?>
+                <span class="saudacao-banner">Olá, <strong><?= htmlspecialchars($nomeUsuario) ?></strong></span>
+            <?php else: ?>
+                <a href="login.php" class="btn-banner-login">Login</a>
+                <a href="register.php" class="btn-banner-cadastro">Cadastrar</a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="menu-hamburguer">
+        <button class="menu-icon" id="menuBtn" aria-label="Abrir menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <nav id="side-menu" class="side-menu">
+            <div class="menu-header">
+                <div class="user-avatar">
+                    <img src="icons/Logo.png" alt="Logo Marcenaria" class="logo-img" style="height:32px;">
+                </div>
+            </div>
+            <div class="menu-links">
+                <a href="configuracoes.php">Configurações</a>
+                <a href="orcamento.php">Orçamento</a>
+            </div>
+            <a href="logout.php" class="logout-link">Sair</a>
+        </nav>
+    </div>
     <?php
     // Produtos em destaque igual ao dashboard
     $produtosDestaque = [];
@@ -91,8 +136,6 @@ if (!empty($categorias)) {
         </div>
     </div>
     <main class="main-loja">
-        <h2 class="titulo-loja">Produtos disponíveis</h2>
-        <!-- Espaço de 25px entre destaque e carrosseis -->
         <div style="height:25px;"></div>
         <?php if (empty($categorias)): ?>
             <div>Nenhuma categoria cadastrada.</div>
@@ -134,57 +177,6 @@ if (!empty($categorias)) {
             <?php endforeach; ?>
         <?php endif; ?>
     </main>
-    <script>
-    // Carrossel horizontal para cada categoria
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.carousel-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var targetId = btn.getAttribute('data-target');
-                var carousel = document.getElementById(targetId);
-                if (carousel) {
-                    var scrollAmount = window.innerWidth < 700 ? 220 : 340;
-                    if (btn.classList.contains('left')) {
-                        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    } else {
-                        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                    }
-                }
-            });
-        });
-    });
 
-    // Card de produto dinâmico (Ver mais)
-    function abrirCardProduto(id) {
-        // Remove card anterior se existir
-        let cardExistente = document.getElementById('card-produto-detalhe');
-        if (cardExistente) cardExistente.remove();
-        // Cria overlay
-        let overlay = document.createElement('div');
-        overlay.id = 'card-produto-detalhe';
-        overlay.className = 'card-produto-detalhe-overlay';
-        overlay.innerHTML = '<div class="card-produto-detalhe"><div class="carregando">Carregando...</div></div>';
-        document.body.appendChild(overlay);
-        // AJAX para buscar dados
-        fetch('produto_detalhe.php?id=' + id)
-            .then(r => r.text())
-            .then(html => {
-                overlay.innerHTML = html;
-            });
-        // Fecha ao clicar fora
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) overlay.remove();
-        });
-    }
-    // Adiciona evento aos botões Ver mais
-    window.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-vermais').forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                let id = btn.parentElement.querySelector('input[name="id"]').value;
-                abrirCardProduto(id);
-            });
-        });
-    });
-    </script>
 </body>
 </html>
