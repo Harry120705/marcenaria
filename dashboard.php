@@ -7,10 +7,11 @@ if (!isset($_SESSION['jwt'])) {
 }
 $userId = $_SESSION['user_id'];
 // Dados do usuário
-$stmt = $conn->prepare('SELECT nome, email FROM usuarios WHERE id = ?');
+// Buscar nome, email e tipo de conta
+$stmt = $conn->prepare('SELECT nome, email, tipo FROM usuarios WHERE id = ?');
 $stmt->bind_param('i', $userId);
 $stmt->execute();
-$stmt->bind_result($nome, $email);
+$stmt->bind_result($nome, $email, $tipoConta);
 $stmt->fetch();
 $stmt->close();
 // Dados dos produtos
@@ -24,7 +25,7 @@ $produtos->close();
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 
 <body>
@@ -51,7 +52,7 @@ $produtos->close();
         </nav>
     </div>
     <main class="main-loja">
-        <h3 class="titulo-dashboard">Produtos em Destaque</h3>
+    <h3 class="titulo-destaque-loja">Produtos em Destaque</h3>
         <div class="produtos-destaque-wrapper">
             <div class="produtos-grid">
                 <?php
@@ -84,7 +85,7 @@ $produtos->close();
                     foreach ($produtosDestaque as $p): ?>
                         <div class="produto-card dashboard-card" data-id="<?= $p['id'] ?>">
                             <div class="produto-info">
-                                <h3><?= htmlspecialchars($p['nome']) ?></h3>
+                                <h3 class="titulo-destaque-loja"><?= htmlspecialchars($p['nome']) ?></h3>
                                 <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
                                 <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
                                 <button class="btn-detalhes" data-id="<?= $p['id'] ?>">Ver detalhes</button>
@@ -93,7 +94,7 @@ $produtos->close();
                         <div class="detalhe-modal" id="detalhe-<?= $p['id'] ?>">
                             <div class="detalhe-card">
                                 <button class="fechar-modal">&times;</button>
-                                <h2><?= htmlspecialchars($p['nome']) ?></h2>
+                                <h2 class="titulo-destaque-loja"><?= htmlspecialchars($p['nome']) ?></h2>
                                 <p class="categoria-produto">Categoria: <span><?= htmlspecialchars($p['categoria'] ?? 'Sem categoria') ?></span></p>
                                 <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.') ?></p>
                                 <?php if (!empty($p['imagem'])): ?>

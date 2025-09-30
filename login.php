@@ -27,10 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($id, $senhaHash);
             $stmt->fetch();
             if (password_verify($senha, $senhaHash)) {
+                // Buscar tipo de conta
+                $stmtTipo = $conn->prepare('SELECT tipo FROM usuarios WHERE id = ?');
+                $stmtTipo->bind_param('i', $id);
+                $stmtTipo->execute();
+                $stmtTipo->bind_result($tipoConta);
+                $stmtTipo->fetch();
+                $stmtTipo->close();
                 $jwt = generateJWT($id, $email);
                 $_SESSION['jwt'] = $jwt;
                 $_SESSION['user_id'] = $id;
-                header('Location: dashboard.php');
+                if ($tipoConta === 'admin') {
+                    header('Location: dashboard.php');
+                } else {
+                    header('Location: loja.php');
+                }
                 exit;
             } else {
                 $toast = 'Senha incorreta.';
@@ -52,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <?php if ($toast): ?>
@@ -68,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     <div class="banner" style="height:120px;font-size:1.3em;">Entrar na Marcenaria</div>
     <div class="container">
-        <h2>Login</h2>
+    <h2 class="titulo-destaque-loja">Login</h2>
         <form method="POST">
             <label>Email:</label>
             <input type="email" name="email" required>

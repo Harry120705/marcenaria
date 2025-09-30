@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
     <?php if ($toast): ?>
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     <div class="banner" style="height:120px;font-size:1.3em;">Cadastre-se na Marcenaria</div>
     <div class="container">
-        <h2>Cadastro de Usuário</h2>
+    <h2 class="titulo-destaque-loja">Cadastro de Usuário</h2>
         <form method="POST" id="formCadastro" autocomplete="off">
             <label>Nome:</label>
             <input type="text" name="nome" id="nome">

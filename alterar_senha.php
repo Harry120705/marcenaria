@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Alterar Senha</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="alterar_senha.css">
 </head>
 <body>
     <div class="banner">Alterar Senha</div>

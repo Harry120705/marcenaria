@@ -1,0 +1,86 @@
+/* Estilos exclusivos para index.php */
+.banner {
+    background: linear-gradient(120deg, #181818 60%, #14532d 100%);
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a3e635;
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px #000;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    background-blend-mode: multiply;
+}
+.subtitle {
+    font-size: 1.1em;
+    color: #388e3c;
+    font-weight: 500;
+    margin-top: 8px;
+    display: block;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(62,39,35,0.08);
+    margin-bottom: 30px;
+    border: 2px solid #4e944f;
+}
+h2 {
+    color: #4e944f;
+    font-size: 1.5em;
+    margin-bottom: 18px;
+    text-align: left;
+}
+.info {
+    margin-top: 20px;
+    color: #333;
+    font-size: 1.1em;
+}
+ul {
+    margin-top: 12px;
+    margin-bottom: 18px;
+    padding-left: 18px;
+}
+li {
+    margin-bottom: 6px;
+    color: #14532d;
+    font-size: 1em;
+}
+.actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+.button {
+    background: #4e944f;
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px #4e944f22;
+}
+.button:hover {
+    color: #fff;
+    transform: scale(1.05);
+}
+footer {
+    text-align:center;
+    margin-top:40px;
+    color:#6c4c1b;
+    font-size: 0.95em;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(120deg, #fff 60%, #14532d 100%);
+    min-height: 100vh;
+    padding: 0;
+}

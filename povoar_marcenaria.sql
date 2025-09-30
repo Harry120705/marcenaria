@@ -1,10 +1,10 @@
 -- Popula a tabela de usuarios
-INSERT INTO usuarios (nome, email, senha, token) VALUES
-('Maria Silva', 'maria@email.com', '$2y$10$hash1', 'token1'),
-('João Souza', 'joao@email.com', '$2y$10$hash2', 'token2'),
-('Ana Paula', 'ana@email.com', '$2y$10$hash3', 'token3'),
-('Carlos Lima', 'carlos@email.com', '$2y$10$hash4', 'token4'),
-('Fernanda Dias', 'fernanda@email.com', '$2y$10$hash5', 'token5');
+INSERT INTO usuarios (nome, email, senha, token, tipo) VALUES
+('Maria Silva', 'maria@email.com', '$2y$10$hash1', 'token1', 'admin'),
+('João Souza', 'joao@email.com', '$2y$10$hash2', 'token2', 'comum'),
+('Ana Paula', 'ana@email.com', '$2y$10$hash3', 'token3', 'comum'),
+('Carlos Lima', 'carlos@email.com', '$2y$10$hash4', 'token4', 'comum'),
+('Fernanda Dias', 'fernanda@email.com', '$2y$10$hash5', 'token5', 'comum');
 
 -- Popula a tabela de categorias
 INSERT INTO categorias (nome) VALUES

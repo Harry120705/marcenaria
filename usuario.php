@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="banner">Usuário</div>
     <form method="POST">
-        <h2>Dados do Usuário</h2>
+    <h2 class="titulo-destaque-loja">Dados do Usuário</h2>
         <label>Nome:</label><br>
         <input type="text" name="nome" value="<?= htmlspecialchars($nome) ?>" required><br>
         <label>Email:</label><br>

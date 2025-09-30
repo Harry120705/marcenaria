@@ -56,7 +56,7 @@ $totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
 <head>
     <meta charset="UTF-8">
     <title>Produtos</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="produtos.css">
 </head>
 <body>
     <div class="banner">Produtos</div>
@@ -109,7 +109,7 @@ $totalPaginas = max(1, ceil($totalProdutos / $itensPorPagina));
             <?php while ($row = $result->fetch_assoc()): ?>
             <div class="produto-card">
                 <div class="produto-info">
-                    <h3 style="display:flex; align-items:center; gap:8px;">
+                    <h3 class="titulo-destaque-loja" style="display:flex; align-items:center; gap:8px;">
                         <?= htmlspecialchars($row['nome']) ?>
                         <button class="btn-destaque" data-id="<?= $row['id'] ?>" data-destaque="<?= $row['destaque'] ?>" title="Destacar produto" style="background:none; border:none; cursor:pointer; font-size:1.3em; color:<?= $row['destaque'] ? '#FFD700' : '#bbb' ?>;">
                             <span class="star-icon" style="pointer-events:none;">&#9733;</span>
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['destaqu
 ?>
 <div id="popup-excluir" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:9999; align-items:center; justify-content:center;">
     <div style="background:#fff; border-radius:12px; box-shadow:0 4px 24px #4e944f22; padding:32px 28px; min-width:320px; max-width:95vw; text-align:center;">
-        <h3 style="color:#a16207; margin-bottom:18px;">Confirmar exclusão</h3>
+    <h3 class="titulo-destaque-loja" style="color:#a16207; margin-bottom:18px;">Confirmar exclusão</h3>
         <p style="margin-bottom:24px;">Tem certeza que deseja excluir este produto?</p>
         <div style="display:flex; gap:18px; justify-content:center;">
             <button id="btnConfirmarExcluir" style="background:#a16207; color:#fff; border:none; border-radius:6px; padding:10px 24px; font-size:1em; cursor:pointer;">Excluir</button>

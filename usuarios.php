@@ -12,10 +12,10 @@ $result = $conn->query('SELECT id, nome, email, criado_em FROM usuarios');
 <head>
     <meta charset="UTF-8">
     <title>Usuários</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="usuarios.css">
 </head>
 <body>
-    <h2>Usuários</h2>
+    <h2 class="titulo-destaque-loja">Usuários</h2>
     <table border="1">
         <tr><th>ID</th><th>Nome</th><th>Email</th><th>Criado em</th><th>Ações</th></tr>
         <?php while ($row = $result->fetch_assoc()): ?>

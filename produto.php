@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- menu hamburguer removido -->
     <div class="banner">Produto</div>
     <form method="POST" enctype="multipart/form-data">
-        <h2><?= $id ? 'Editar Produto' : 'Novo Produto' ?></h2>
+    <h2 class="titulo-destaque-loja"><?= $id ? 'Editar Produto' : 'Novo Produto' ?></h2>
         <?php if ($id && !empty($imagemPath)): ?>
             <div style="text-align:center; margin-bottom:18px;">
                 <img src="<?= htmlspecialchars($imagemPath) ?>" alt="Imagem do produto" style="max-width:180px; max-height:180px; border-radius:10px; box-shadow:0 2px 12px #4e944f22;">
